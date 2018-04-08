@@ -33,7 +33,7 @@ class Water extends Renderer {
       value: new THREE.Vector2(100.0, 100.0)
     };
 
-    const tank = new THREE.PlaneGeometry(25, 30, true);
+    const tank = new THREE.PlaneGeometry(63, 37, true);
     const conematerial = this.createShaderMaterial(conevert, conefrag);
     const creammaterial = this.createShaderMaterial(creamvert, creamfrag);
 
@@ -47,7 +47,7 @@ class Water extends Renderer {
     this.camera.position.z = 24;
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
-    this.setLight(0, 0, 26);
+    this.setLight(0, 0, 33);
   }
 
   // update(dt) {
