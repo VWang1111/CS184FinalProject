@@ -11,7 +11,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className='header'>
-          <h1>Project 3-2 Part 5 - Shaders</h1>
+          <h1>CS184 Final Project Water Rendering</h1>
         </div>
         {sections}
       </div>

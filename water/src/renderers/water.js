@@ -7,7 +7,7 @@ import creamfrag from '../shaders/extra/cream.frag';
 import conetex from '../textures/cone.png';
 import creamtex from '../textures/cream.png';
 
-class T5Renderer extends Renderer {
+class Water extends Renderer {
   initScene() {
     if (!this.checkShader(conevert, conefrag) || !this.checkShader(creamvert, creamfrag)) {
       this.setErrorScene();
@@ -53,4 +53,4 @@ class T5Renderer extends Renderer {
   }
 }
 
-export default T5Renderer;
+export default Water;
