@@ -75,7 +75,7 @@ class Renderer {
     const dx = (x - this.inputState.lastMouse[0]) / this.view.width;
     const dy = (this.inputState.lastMouse[1] - y) / this.view.height;
     this.inputState.lastMouse = [x, y];
-    this.updateCamera(dx, dy);
+    // this.updateCamera(dx, dy);
   };
 
   init() {
