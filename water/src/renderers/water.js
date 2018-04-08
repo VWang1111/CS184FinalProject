@@ -14,7 +14,7 @@ class Water extends Renderer {
       return;
     }
 
-    this.setLight();
+    // this.setLight();
     this.uniforms['conetex'] = {
       type: "t",
       value: new THREE.TextureLoader().load(conetex)
@@ -33,17 +33,21 @@ class Water extends Renderer {
       value: new THREE.Vector2(100.0, 100.0)
     };
 
-    const geometry = new THREE.SphereGeometry(3, 64, 64);
-    const g2 = new THREE.BoxGeometry(8, 12, 12, true);
+    const tank = new THREE.PlaneGeometry(25, 30, true);
     const conematerial = this.createShaderMaterial(conevert, conefrag);
     const creammaterial = this.createShaderMaterial(creamvert, creamfrag);
-    const sphere = new THREE.Mesh(geometry, creammaterial);
-    sphere.position.set(0, -2.2, 0);
 
-    const box = new THREE.Mesh(g2, conematerial);
-    box.position.set(0, 0, 0);
-    this.scene.add(box);
-    this.scene.add(sphere);
+    const plane = new THREE.Mesh(tank, conematerial);
+    plane.position.set(0, 0, 0);
+    this.scene.add(plane);
+
+    // this.updateCamera(0, 0);
+    this.camera.position.x = 0;
+    this.camera.position.y = 0;
+    this.camera.position.z = 24;
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+    this.setLight(0, 0, 26);
   }
 
   // update(dt) {
