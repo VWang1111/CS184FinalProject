@@ -8,7 +8,7 @@ varying vec3 fNormal;
 
 void main() {
     // TODO: Part 5.1
-    vec3 d = lPosition - fPosition;
-    vec3 normalized = d / length(d);
-    gl_FragColor = vec4(lIntensity * max(0.0, dot(fNormal, normalized))  / dot(d, d), 1.0);
+    vec3 diffuse = lIntensity / length(lPosition - fPosition) / length(lPosition - fPosition) 
+    					* max(0.0, dot(normalize(fNormal), normalize(lPosition - fPosition)));
+    gl_FragColor = vec4(diffuse, 1.0);
 }

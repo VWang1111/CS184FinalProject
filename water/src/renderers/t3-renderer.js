@@ -4,7 +4,7 @@ import Renderer from '../lib/renderer';
 import vert from '../shaders/task-3/texture.vert';
 import frag from '../shaders/task-3/texture.frag';
 
-import texture from '../textures/paper.png';
+import texture from '../textures/metal_plate_diamond3.png';
 
 export default class extends Renderer {
   initScene() {

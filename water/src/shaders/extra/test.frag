@@ -2,11 +2,11 @@ precision highp float;
 
 uniform float time;
 
+varying vec2 fUv;
+
 void main() {
-    // TODO: Part 5.1
-    float t = time / 5.;
-    float r = sin(t);
-    float g = cos(t);
-    float b = sin(t) + cos(t);
-    gl_FragColor = vec4(r, g, b, 1.);
+    float t = time / 1000.;
+    float r = fUv.y;
+    float g = (cos(t) * 0.25 + 0.5);
+    gl_FragColor = vec4(r, g, cos(t) * sin(t), 1.);
 }

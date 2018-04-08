@@ -9,11 +9,12 @@ varying vec3 fNormal;
 
 void main() {
     // TODO: Part 5.2
-    vec3 d = lPosition - fPosition;
-    vec3 normalized = d / length(d);
-    vec3 v = cameraPosition - fPosition;
-    vec3 h = (d + v) / length(d + v);
-    vec4 diffuse = vec4(lIntensity * max(0.0, dot(fNormal, normalized))  / dot(d, d), 1.0);
-    vec4 specular = vec4(lIntensity * pow(max(0.0, dot(fNormal, h)), 28.0)  / dot(d, d), 1.0);
-    gl_FragColor = 0.05 * vec4(1.0,1.0,1.0,1.0) + 0.8 * diffuse + .5 * specular;
+    vec3 h = normalize(normalize(lPosition - fPosition) + normalize(cameraPosition - fPosition));
+    float ka = 0.4, kd = 0.6, ks = 0.5;
+    vec3 ambient = vec3(0.6, 0.8, 0.0);
+    vec3 diffuse = lIntensity / length(lPosition - fPosition) / length(lPosition - fPosition) 
+    					* max(0.0, dot(normalize(fNormal), normalize(lPosition - fPosition)));
+    vec3 specular = lIntensity / length(lPosition - fPosition) / length(lPosition - fPosition)
+    					* pow(max(0.0, dot(normalize(fNormal), h)), 100.0);
+    gl_FragColor = vec4(ka * ambient + kd * diffuse + ks * specular, 1.0);
 }

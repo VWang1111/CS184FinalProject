@@ -11,6 +11,6 @@ varying vec3 fNormal;
 void main() {
 	// TODO: Part 5.1
     fPosition = vec3(modelMatrix * vec4(position, 1.0));
-    fNormal = vec3(modelMatrix * vec4(normal, 1.0));
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(fPosition, 1.0);
+    fNormal = normalize(vec3(modelMatrix * vec4(normal, 0.0)));
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

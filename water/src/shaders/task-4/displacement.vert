@@ -16,22 +16,19 @@ void main() {
     vec3 offset = position;
     vec3 b = cross(normal, tangent);
     mat3 tbn = mat3(tangent, b, normal);
-    float height = textureDimension[0];
-    float width = textureDimension[1];
 
-    float heightScaling = 0.9;
+    vec4 idk = texture2D(textureDisplacement, uv);
+    vec4 du_tex = texture2D(textureDisplacement, uv + vec2(1.0/textureDimension.x, 0));
+    vec4 dv_tex = texture2D(textureDisplacement, uv + vec2(0, 1.0/textureDimension.y));
+    // TODO: Compute displaced vertices
+    float heightScaling = 0.8;
+    offset += normal * idk.r * heightScaling;
+    // TODO: Compute displaced normals
     float normalScaling = 1.0;
-    vec2 u1v = vec2(uv[0] + 1.0 / width, uv[1]);
-    vec2 uv1 = vec2(uv[0], uv[1] + 1.0 / height);
-    float huv = texture2D(textureDisplacement, uv)[0];
-    float hu1v = texture2D(textureDisplacement, u1v)[0];
-    float huv1 = texture2D(textureDisplacement, uv1)[0];
-
-    float dU = heightScaling * normalScaling * (hu1v - huv);
-    float dV = heightScaling * normalScaling * (huv1 - huv);
-    vec3 no = vec3(-dU, -dV, 1.0);
-
-    fPosition = vec3(modelMatrix * vec4(position, 1.0)) ;
-    fNormal = vec3(modelMatrix * vec4(tbn * no, 1.0));
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(offset + no * huv * heightScaling, 1.0);
+    float du = (du_tex.r - idk.r) * heightScaling * normalScaling;
+    float dv = (dv_tex.r - idk.r) * heightScaling * normalScaling;
+    vec3 no = vec3(-du, -dv, 1.0);
+    fPosition = offset;
+    fNormal = tbn * no;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(offset, 1.0);
 }

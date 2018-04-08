@@ -4,7 +4,7 @@ import Renderer from '../lib/renderer';
 import vert from '../shaders/task-4/displacement.vert';
 import frag from '../shaders/task-2/phong.frag';
 
-import texture from '../textures/rocks.png';
+import texture from '../textures/metal_plate_diamond3.png';
 
 export default class extends Renderer {
   initScene() {
