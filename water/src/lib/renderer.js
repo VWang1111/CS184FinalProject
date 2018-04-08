@@ -75,7 +75,7 @@ class Renderer {
     const dx = (x - this.inputState.lastMouse[0]) / this.view.width;
     const dy = (this.inputState.lastMouse[1] - y) / this.view.height;
     this.inputState.lastMouse = [x, y];
-    this.updateCamera(dx, dy);
+    // this.updateCamera(dx, dy);
   };
 
   init() {
@@ -86,7 +86,7 @@ class Renderer {
       phi: 0,
       distance: 15,
     };
-    this.updateCamera();
+    // this.updateCamera();
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.view,

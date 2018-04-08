@@ -1,7 +1,7 @@
 import THREE from '../lib/three';
 import Renderer from '../lib/renderer';
-import conevert from '../shaders/water/diffuse.vert';
-import conefrag from '../shaders/water/diffuse.frag';
+import conevert from '../shaders/water/water.vert';
+import conefrag from '../shaders/water/water.frag';
 import texture from '../textures/water.png';
 
 class Water extends Renderer {
