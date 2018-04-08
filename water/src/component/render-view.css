@@ -10,6 +10,7 @@
 
 #stats {
   z-index: 1;
+  display: none; /*removes the little stats on the upper left corner*/
   position: absolute;
   left: 0;
   top: 0;
