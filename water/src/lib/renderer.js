@@ -86,7 +86,7 @@ class Renderer {
       phi: 0,
       distance: 15,
     };
-    this.updateCamera();
+    // this.updateCamera();
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.view,
