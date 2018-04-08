@@ -17,7 +17,7 @@ class Water extends Renderer {
       value: new THREE.TextureLoader().load(texture)
     };
 
-    const tank = new THREE.PlaneGeometry(63, 37, true);
+    const tank = new THREE.PlaneGeometry(this.view.width/10.0, this.view.height/10.0, true);
     const watermaterial = this.createShaderMaterial(conevert, conefrag);
 
     const plane = new THREE.Mesh(tank, watermaterial);
