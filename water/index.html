@@ -256,7 +256,8 @@
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 3000 );
-				camera.position.set( 0, 200, 350 );
+				camera.position.set( 0, 360, 20 );
+				// camera.position.set( 0, 200, 350 );
 				scene = new THREE.Scene();
 				var sun = new THREE.DirectionalLight( 0xFFFFFF, 1.0 );
 				sun.position.set( 300, 400, 175 );
@@ -268,7 +269,11 @@
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer.domElement );
-				//controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls = new THREE.OrbitControls( camera, renderer.domElement );
+				controls.enableRotate = false;
+				controls.enablePan = false;
+				controls.enableZoom = false;
+
 				stats = new Stats();
 				container.appendChild( stats.dom );
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -342,6 +347,7 @@
 				waterMesh.matrixAutoUpdate = false;
 				waterMesh.updateMatrix();
 				scene.add( waterMesh );
+				// waterMesh.lookAt(camera.position);
 				// Mesh just for mouse raycasting
 				var geometryRay = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, 1, 1 );
 				meshRay = new THREE.Mesh( geometryRay, new THREE.MeshBasicMaterial( { color: 0xFFFFFF, visible: false } ) );
@@ -349,6 +355,8 @@
 				meshRay.matrixAutoUpdate = false;
 				meshRay.updateMatrix();
 				scene.add( meshRay );
+				// meshRay.position.set(1000,100,0);
+
 				// Creates the gpu computation class and sets it up
 				gpuCompute = new GPUComputationRenderer( WIDTH, WIDTH, renderer );
 				var heightmap0 = gpuCompute.createTexture();
