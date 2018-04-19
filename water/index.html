@@ -270,9 +270,9 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer.domElement );
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
-				controls.enableRotate = false;
-				controls.enablePan = false;
-				controls.enableZoom = false;
+				// controls.enableRotate = false;
+				// controls.enablePan = false;
+				// controls.enableZoom = false;
 
 				stats = new Stats();
 				container.appendChild( stats.dom );
@@ -311,12 +311,10 @@
 			}
 			function initWater() {
 				var bottomG = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, WIDTH - 1, WIDTH -1 );
-
 				var loader = new THREE.TextureLoader();
 				loader.crossOrigin = true;
 				var bottomMat = new THREE.MeshPhongMaterial({ transparent: false, map: loader.load('https://VWang1111.github.io/CS184FinalProject/water/textures/water.png')});
 				var botmesh = new THREE.Mesh(bottomG, bottomMat);
-				botmesh.position.set(0, -2.2, 0);
 				scene.add(botmesh);
 				
 				var materialColor = 0x0040C0;
@@ -341,6 +339,8 @@
 				material.color = new THREE.Color( materialColor );
 				material.specular = new THREE.Color( 0x111111 );
 				material.shininess = 50;
+				material.transparent = true;
+				material.opacity = 0.5;
 				// Sets the uniforms with the material values
 				material.uniforms.diffuse.value = material.color;
 				material.uniforms.specular.value = material.specular;
@@ -354,6 +354,9 @@
 				waterMesh.rotation.x = - Math.PI / 2;
 				waterMesh.matrixAutoUpdate = false;
 				waterMesh.updateMatrix();
+				botmesh.position.set(waterMesh.position.x, waterMesh.position.y-30, waterMesh.position.z);
+				botmesh.rotation.x = - Math.PI / 2;
+
 				scene.add( waterMesh );
 				// waterMesh.lookAt(camera.position);
 				// Mesh just for mouse raycasting
@@ -363,7 +366,6 @@
 				meshRay.matrixAutoUpdate = false;
 				meshRay.updateMatrix();
 				scene.add( meshRay );
-				// meshRay.position.set(1000,100,0);
 
 				// Creates the gpu computation class and sets it up
 				gpuCompute = new GPUComputationRenderer( WIDTH, WIDTH, renderer );
