@@ -310,7 +310,15 @@
 				valuesChanger();
 			}
 			function initWater() {
+				var bottomG = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, WIDTH - 1, WIDTH -1 );
 
+				var loader = new THREE.TextureLoader();
+				loader.crossOrigin = true;
+				var bottomMat = new THREE.MeshPhongMaterial({ transparent: false, map: loader.load('https://VWang1111.github.io/CS184FinalProject/water/textures/water.png')});
+				var botmesh = new THREE.Mesh(bottomG, bottomMat);
+				botmesh.position.set(0, -2.2, 0);
+				scene.add(botmesh);
+				
 				var materialColor = 0x0040C0;
 				var geometry = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, WIDTH - 1, WIDTH -1 );
 				// material: make a ShaderMaterial clone of MeshPhongMaterial, with customized vertex shader
