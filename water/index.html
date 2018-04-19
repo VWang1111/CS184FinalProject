@@ -103,7 +103,7 @@
 			uniform vec3 specular;
 			uniform float shininess;
 			uniform float opacity;
-			uniform sampler2D texture;
+			uniform sampler2D pondtexture;
 			varying vec2 fUV;
 			#include <common>
 			#include <packing>
@@ -146,7 +146,7 @@
 				#include <aomap_fragment>
 				vec3 outgoingLight = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse + reflectedLight.directSpecular + reflectedLight.indirectSpecular + totalEmissiveRadiance;
 				#include <envmap_fragment>
-				gl_FragColor = texture2D(texture, fUV) + vec4( outgoingLight, diffuseColor.a );
+				gl_FragColor = texture2D(pondtexture, fUV) + vec4( outgoingLight, diffuseColor.a );
 				#include <tonemapping_fragment>
 				#include <encodings_fragment>
 				#include <fog_fragment>
@@ -210,17 +210,6 @@
 				#include <worldpos_vertex>
 				#include <envmap_vertex>
 				#include <shadowmap_vertex>
-			}
-		</script>
-
-		<script id="texshader" type="x-shader/x-vertex">
-			precision highp float;
-
-			uniform sampler2D texture;
-			varying vec2 fUv;
-
-			void main() {
-			  gl_FragColor = texture2D(texture, fUv);
 			}
 		</script>
 
@@ -321,8 +310,10 @@
 					uniforms: THREE.UniformsUtils.merge( [
 						THREE.ShaderLib[ 'phong' ].uniforms,
 						{
-							heightmap: { value: null },
-							texture: {type: "t", value: new THREE.TextureLoader().load("./textures/water.png")}
+							heightmap: { value: null }
+						},
+						{
+							pondtexture: {type: "t", value: new THREE.TextureLoader().load("https://VWang1111.github.io/CS184FinalProject/water/textures/water.png")}
 						}
 					] ),
 					vertexShader: document.getElementById( 'waterVertexShader' ).textContent,
@@ -334,7 +325,7 @@
 				material.specular = new THREE.Color( 0x111111 );
 				material.shininess = 50;
 				// Sets the uniforms with the material values
-				material.uniforms.diffuse.value = material.color;
+				material.uniforms.diffuse.value = material.color.bgra;
 				material.uniforms.specular.value = material.specular;
 				material.uniforms.shininess.value = Math.max( material.shininess, 1e-4 );
 				material.uniforms.opacity.value = material.opacity;
