@@ -374,7 +374,7 @@
 				heightmapVariable = gpuCompute.addVariable( "heightmap", document.getElementById( 'heightmapFragmentShader' ).textContent, heightmap0 );
 				gpuCompute.setVariableDependencies( heightmapVariable, [ heightmapVariable ] );
 				heightmapVariable.material.uniforms.mousePos = { value: new THREE.Vector2( 10000, 10000 ) };
-				heightmapVariable.material.uniforms.mouseSize = { value: 20.0 };
+                heightmapVariable.material.uniforms.mouseSize = { value: 20.0 };
 				heightmapVariable.material.uniforms.viscosityConstant = { value: 0.03 };
 				heightmapVariable.material.defines.BOUNDS = BOUNDS.toFixed( 1 );
 				var error = gpuCompute.init();
