@@ -453,6 +453,9 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 			function setMouseCoords( x, y ) {
+			    //only update the currentMouseSize here if pressure.js changes the highest force variable
+                //this prevents water from leaving the tank and the current Mouse Size always being 0 and not
+                //able to be changed without a pressure sensitive trackpad
 			    if(highestForce != 0) {
                     currentMouseSize = highestForce * 50;
                 }
