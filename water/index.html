@@ -332,7 +332,7 @@
 				gui.add( effectController, "mouseSize", 1.0, 50.0, 1.0 ).onChange( valuesChanger ).listen();
 				gui.add( effectController, "viscosity", 0.0, 0.1, 0.001 ).onChange( valuesChanger );
 				gui.add( effectController, "waveSpeed", 1.0, 10.0, 0.5 ).onChange( valuesChanger );
-				gui.add( effectController, "noise", 1.0, 10.0, 0.5 ).onChange( valuesChanger2 );
+				gui.add( effectController, "noise", 0.0, 10.0, 0.5 ).onChange( valuesChanger2 );
 				var buttonSmooth = {
 				    smoothWater: function() {
 					smoothWater();
@@ -437,7 +437,7 @@
 					for ( var i = 0; i < WIDTH; i++ ) {
 						var x = i * 128 / WIDTH;
 						var y = j * 128 / WIDTH;
-					        pixels[ p + 0 ] = noise(x, y, 123.4) / (11.0 - noiseLevel);
+					        pixels[ p + 0 ] = noiseLevel * noise(x, y, 123.4) / 10.0;
 						pixels[ p + 1 ] = 0;
 						pixels[ p + 2 ] = 0;
 						pixels[ p + 3 ] = 1;
