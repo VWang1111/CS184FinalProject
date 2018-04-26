@@ -269,7 +269,8 @@
 				renderer = new THREE.WebGLRenderer();
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
-				container.appendChild( renderer.domElement );
+                renderer.domElement.id = 'waterCanvas';
+                container.appendChild( renderer.domElement );
 				controls = new THREE.OrbitControls( camera, renderer.domElement );
 				controls.enableRotate = false;
 				controls.enablePan = false;
