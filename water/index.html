@@ -325,9 +325,9 @@
 				var valuesChanger2 = function() {
 					scene.remove(waterMesh);
 					scene.remove(botmesh);
+					noiseLevel = effectController.noise;
 					initWater();
 					valuesChanger();
-					noiseLevel = effectController.noise;
 				};
 				gui.add( effectController, "mouseSize", 1.0, 50.0, 1.0 ).onChange( valuesChanger ).listen();
 				gui.add( effectController, "viscosity", 0.0, 0.1, 0.001 ).onChange( valuesChanger );
