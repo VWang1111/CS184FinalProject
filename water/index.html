@@ -302,8 +302,8 @@
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.addEventListener('mousedown', onDocumentMouseDown, false);
                 document.addEventListener('mouseup', onDocumentMouseUp, false);
-				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+                renderer.domElement.addEventListener( 'touchstart', onDocumentTouchStart, false );
+				renderer.domElement.addEventListener( 'touchmove', onDocumentTouchMove, false );
 				document.addEventListener( 'keydown', function( event ) {
 					// W Pressed: Toggle wireframe
 					if ( event.keyCode === 87 ) {
