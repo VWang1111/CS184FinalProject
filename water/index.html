@@ -237,7 +237,7 @@
 			var heightmapVariable;
 			var waterUniforms;
 			var smoothShader;
-			var highestForce;
+			var highestForce = 0;
 			var currentMouseSize;
             var effectController = {
                 mouseSize: 20.0,
@@ -453,7 +453,9 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 			}
 			function setMouseCoords( x, y ) {
-			    currentMouseSize = highestForce * 50;
+			    if(highestForce != 0) {
+                    currentMouseSize = highestForce * 50;
+                }
 			    effectController.mouseSize = currentMouseSize;
                 heightmapVariable.material.uniforms.mouseSize.value = currentMouseSize;
 				mouseCoords.set( ( x / renderer.domElement.clientWidth ) * 2 - 1, - ( y / renderer.domElement.clientHeight ) * 2 + 1 );
