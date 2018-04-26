@@ -232,6 +232,7 @@
 			var mouseCoords = new THREE.Vector2();
 			var raycaster = new THREE.Raycaster();
 			var waterMesh;
+			var botmesh;
 			var meshRay;
 			var gpuCompute;
 			var heightmapVariable;
@@ -242,8 +243,10 @@
             var effectController = {
                 mouseSize: 20.0,
                 viscosity: 0.03,
-                waveSpeed: 3.0
+                waveSpeed: 3.0,
+                noise: 1.0
             };
+            var noiseLevel = 1.0;
 			var simplex = new SimplexNoise();
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
@@ -319,9 +322,17 @@
 					heightmapVariable.material.uniforms.viscosityConstant.value = effectController.viscosity;
 					heightmapVariable.material.uniforms.waveSpeedConstant.value = effectController.waveSpeed;
 				};
+				var valuesChanger2 = function() {
+					scene.remove(waterMesh);
+					scene.remove(botmesh);
+					initWater();
+					valuesChanger();
+					noiseLevel = effectController.noise;
+				};
 				gui.add( effectController, "mouseSize", 1.0, 50.0, 1.0 ).onChange( valuesChanger ).listen();
 				gui.add( effectController, "viscosity", 0.0, 0.1, 0.001 ).onChange( valuesChanger );
 				gui.add( effectController, "waveSpeed", 1.0, 10.0, 0.5 ).onChange( valuesChanger );
+				gui.add( effectController, "noise", 1.0, 10.0, 0.5 ).onChange( valuesChanger2 );
 				var buttonSmooth = {
 				    smoothWater: function() {
 					smoothWater();
@@ -336,7 +347,7 @@
 				var loader = new THREE.TextureLoader();
 				loader.crossOrigin = true;
 				var bottomMat = new THREE.MeshPhongMaterial({ transparent: false, map: loader.load('https://VWang1111.github.io/CS184FinalProject/water/textures/water.png')});
-				var botmesh = new THREE.Mesh(bottomG, bottomMat);
+				botmesh = new THREE.Mesh(bottomG, bottomMat);
 				scene.add(botmesh);
 				
 				var materialColor = 0x0040C0;
@@ -426,7 +437,7 @@
 					for ( var i = 0; i < WIDTH; i++ ) {
 						var x = i * 128 / WIDTH;
 						var y = j * 128 / WIDTH;
-					        pixels[ p + 0 ] = 0;
+					        pixels[ p + 0 ] = noise(x, y, 123.4) / (11.0 - noiseLevel);
 						pixels[ p + 1 ] = 0;
 						pixels[ p + 2 ] = 0;
 						pixels[ p + 3 ] = 1;
