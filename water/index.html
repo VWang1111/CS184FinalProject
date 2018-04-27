@@ -74,8 +74,15 @@
 				// Viscosity
 				heightmapValue.x += sump * viscosityConstant;
 				// Mouse influence
-				float mousePhase = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
-				heightmapValue.x += cos( mousePhase ) + 1.0;
+				vec2 diff = abs( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( mousePos.x, - mousePos.y ) );
+				if ( ( diff.x < mouseSize ) && ( diff.y < mouseSize ) ) {
+					heightmapValue.x += 5.0;
+				}
+				else {
+					heightmapValue.x -= 0.0;
+				}
+				//float mousePhase = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
+				//heightmapValue.x += cos( mousePhase ) + 1.0;
 				gl_FragColor = heightmapValue;
 			}
 		</script>
@@ -244,7 +251,8 @@
                 mouseSize: 20.0,
                 viscosity: 0.03,
                 waveSpeed: 3.0,
-                noise: 1.0
+                noise: 1.0,
+                shape: "circle"
             };
             var noiseLevel = 1.0;
 			var simplex = new SimplexNoise();
@@ -332,7 +340,9 @@
 				gui.add( effectController, "mouseSize", 1.0, 50.0, 1.0 ).onChange( valuesChanger ).listen();
 				gui.add( effectController, "viscosity", 0.0, 0.1, 0.001 ).onChange( valuesChanger );
 				gui.add( effectController, "waveSpeed", 1.0, 10.0, 0.5 ).onChange( valuesChanger );
+				gui.add( effectController, "shape", 0.0, 10.0, 0.5 ).onChange( valuesChanger );
 				gui.add( effectController, "noise", 0.0, 10.0, 0.5 ).onChange( valuesChanger2 );
+
 				var buttonSmooth = {
 				    smoothWater: function() {
 					smoothWater();
