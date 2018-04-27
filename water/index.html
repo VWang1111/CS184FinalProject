@@ -77,8 +77,8 @@
 				// uv_converted goes between [-0.5, 0.5], to match the nature of the coordinates of mousePos,
 				// where (0, 0) is the center of the screen
 				vec2 uv_converted = uv - vec2(0.5);
-				uv_converted.x *= BOUNDS;
-				uv_converted.y *= BOUNDS;
+				uv_converted.x *= BOUNDSW;
+				uv_converted.y *= BOUNDSH;
 				float mousePhase = clamp( length( uv_converted - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
 				heightmapValue.x += cos( mousePhase ) + 1.0;
 				gl_FragColor = heightmapValue;
