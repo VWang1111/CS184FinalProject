@@ -74,7 +74,12 @@
 				// Viscosity
 				heightmapValue.x += sump * viscosityConstant;
 				// Mouse influence
-				float mousePhase = clamp( length( ( uv - vec2( 0.5 ) ) * BOUNDS - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
+				// uv_converted goes between [-0.5, 0.5], to match the nature of the coordinates of mousePos,
+				// where (0, 0) is the center of the screen
+				vec2 uv_converted = uv - vec2(0.5);
+				uv_converted.x *= BOUNDS;
+				uv_converted.y *= BOUNDS;
+				float mousePhase = clamp( length( uv_converted - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
 				heightmapValue.x += cos( mousePhase ) + 1.0;
 				gl_FragColor = heightmapValue;
 			}
@@ -223,6 +228,8 @@
 			var WIDTH = hash || 128;
 			var NUM_TEXELS = WIDTH * WIDTH;
 			// Water size in system units
+			var meshwidth = window.innerWidth;
+			var meshheight = window.innerHeight;
 			var BOUNDS = 512;
 			var BOUNDS_HALF = BOUNDS * 0.5;
 			var container, stats;
@@ -343,7 +350,7 @@
 				valuesChanger();
 			}
 			function initWater() {
-				var bottomG = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, WIDTH - 1, WIDTH -1 );
+				var bottomG = new THREE.PlaneBufferGeometry( meshwidth, meshheight, WIDTH - 1, WIDTH -1 );
 				var loader = new THREE.TextureLoader();
 				loader.crossOrigin = true;
 				var bottomMat = new THREE.MeshPhongMaterial({ transparent: false, map: loader.load('https://VWang1111.github.io/CS184FinalProject/water/textures/water.png')});
@@ -351,7 +358,7 @@
 				scene.add(botmesh);
 				
 				var materialColor = 0x0040C0;
-				var geometry = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, WIDTH - 1, WIDTH -1 );
+				var geometry = new THREE.PlaneBufferGeometry( meshwidth, meshheight, WIDTH - 1, WIDTH -1 );
 				// material: make a ShaderMaterial clone of MeshPhongMaterial, with customized vertex shader
 				var material = new THREE.ShaderMaterial( {
 					uniforms: THREE.UniformsUtils.merge( [
@@ -366,7 +373,7 @@
 					vertexShader: document.getElementById( 'waterVertexShader' ).textContent,
 					fragmentShader: document.getElementById('pondBottomShader').textContent
 				} );
-				console.log(material.uniforms);
+				//console.log(material.uniforms);
 				material.lights = true;
 				// Material attributes from MeshPhongMaterial
 				material.color = new THREE.Color( materialColor );
@@ -393,7 +400,7 @@
 				scene.add( waterMesh );
 				// waterMesh.lookAt(camera.position);
 				// Mesh just for mouse raycasting
-				var geometryRay = new THREE.PlaneBufferGeometry( BOUNDS, BOUNDS, 1, 1 );
+				var geometryRay = new THREE.PlaneBufferGeometry( meshwidth, meshheight, 1, 1 );
 				meshRay = new THREE.Mesh( geometryRay, new THREE.MeshBasicMaterial( { color: 0xFFFFFF, visible: false } ) );
 				meshRay.rotation.x = - Math.PI / 2;
 				meshRay.matrixAutoUpdate = false;
@@ -411,6 +418,8 @@
 				heightmapVariable.material.uniforms.viscosityConstant = { value: 0.03 };
 				heightmapVariable.material.uniforms.waveSpeedConstant = { value: 3.0 };
 				heightmapVariable.material.defines.BOUNDS = BOUNDS.toFixed( 1 );
+				heightmapVariable.material.defines.BOUNDSW = meshwidth.toFixed( 1 );
+				heightmapVariable.material.defines.BOUNDSH = meshheight.toFixed( 1 );
 				var error = gpuCompute.init();
 				if ( error !== null ) {
 				    console.error( error );
@@ -467,6 +476,7 @@
 			    //only update the currentMouseSize here if pressure.js changes the highest force variable
                 //this prevents water from leaving the tank and the current Mouse Size always being 0 and not
                 //able to be changed without a pressure sensitive trackpad
+                //console.log(x, y);
 			    if(highestForce != 0) {
                     currentMouseSize = highestForce * 50;
                 }
@@ -474,6 +484,7 @@
                 heightmapVariable.material.uniforms.mouseSize.value = currentMouseSize;
 				mouseCoords.set( ( x / renderer.domElement.clientWidth ) * 2 - 1, - ( y / renderer.domElement.clientHeight ) * 2 + 1 );
 				mouseMoved = true;
+				//console.log(mouseCoords);
 			}
             function onDocumentMouseDown( event ) {
 			    mouseDown = true;
@@ -514,6 +525,7 @@
 					if ( intersects.length > 0 ) {
 					    var point = intersects[ 0 ].point;
 					    uniforms.mousePos.value.set( point.x, point.z );
+					    console.log(uniforms.mousePos.value);
 					}
 					else {
 					    uniforms.mousePos.value.set( 10000, 10000 );
