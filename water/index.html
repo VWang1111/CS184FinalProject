@@ -332,6 +332,16 @@
 					if ( event.keyCode === 87 ) {
 						waterMesh.material.wireframe = ! waterMesh.material.wireframe;
 						waterMesh.material.needsUpdate = true;
+					} else if ( event.keyCode === 32 ) {
+						if (gui.domElement.style.display === "none") {
+							gui.domElement.style.display = "";
+							stats.domElement.style.display = "";
+						    document.getElementById("info").style.display = "";
+						} else {
+							gui.domElement.style.display = "none";
+							stats.domElement.style.display = "none";
+						    document.getElementById("info").style.display = "none";
+						}
 					}
 				} , false );
 				window.addEventListener( 'resize', onWindowResize, false );
