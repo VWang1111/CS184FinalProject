@@ -53,6 +53,7 @@
 			uniform float viscosityConstant;
 			uniform float waveSpeedConstant;
 			uniform bool squareWave;
+			uniform float waveSize;
 			#define deltaTime ( 1.0 / 60.0 )
 			#define GRAVITY_CONSTANT ( resolution.x * deltaTime )
 			void main()	{
@@ -79,7 +80,7 @@
 					float diffx = abs( ( uv - vec2( 0.5 ) ) * BOUNDSW - vec2( mousePos.x, - mousePos.y ) ).x;
 					float diffy = abs( ( uv - vec2( 0.5 ) ) * BOUNDSH - vec2( mousePos.x, - mousePos.y ) ).y;
 				 	if ( ( diffx < mouseSize ) && ( diffy < mouseSize ) ) {
-					 	heightmapValue.x += 2.0;
+					 	heightmapValue.x += 2.0 * waveSize;
 					 }
 				}
 				else {
@@ -87,7 +88,7 @@
 					uv_converted.x *= BOUNDSW;
 					uv_converted.y *= BOUNDSH;
 					float mousePhase = clamp( length( uv_converted - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
-					heightmapValue.x += cos( mousePhase ) + 1.0;
+					heightmapValue.x += (cos( mousePhase ) + 1.0) * waveSize;
 				}
 				// uv_converted goes between [-0.5, 0.5], to match the nature of the coordinates of mousePos,
 				// where (0, 0) is the center of the screen
@@ -263,7 +264,8 @@
                 viscosity: 0.03,
                 waveSpeed: 3.0,
                 noise: 1.0,
-                squareWave: false
+                squareWave: false,
+                waveSize: 1.0
             };
             var noiseLevel = 1.0;
 			var simplex = new SimplexNoise();
@@ -300,7 +302,7 @@
 				container = document.createElement( 'div' );
 				document.body.appendChild( container );
 				// camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 3000 );
-				camera = new THREE.OrthographicCamera( -window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, .1, 1000 );
+				camera = new THREE.OrthographicCamera( -window.innerWidth/2, window.innerWidth/2, window.innerHeight/2, -window.innerHeight/2, .1, 5000 );
 				camera.position.set( 0, 360, 20 );
 				// camera.position.set( 0, 200, 350 );
 				scene = new THREE.Scene();
@@ -351,8 +353,8 @@
 					heightmapVariable.material.uniforms.mouseSize.value = effectController.mouseSize;
 					heightmapVariable.material.uniforms.viscosityConstant.value = effectController.viscosity;
 					heightmapVariable.material.uniforms.waveSpeedConstant.value = effectController.waveSpeed;
-					heightmapVariable.material.uniforms.squareWave.value = effectController.squareWave
-
+					heightmapVariable.material.uniforms.squareWave.value = effectController.squareWave;
+					heightmapVariable.material.uniforms.waveSize.value = effectController.waveSize;
 				};
 				var valuesChanger2 = function() {
 					scene.remove(waterMesh);
@@ -364,6 +366,7 @@
 				gui.add( effectController, "mouseSize", 1.0, 50.0, 1.0 ).onChange( valuesChanger ).listen();
 				gui.add( effectController, "viscosity", 0.0, 0.1, 0.001 ).onChange( valuesChanger );
 				gui.add( effectController, "waveSpeed", 1.0, 10.0, 0.5 ).onChange( valuesChanger );
+				gui.add( effectController, "waveSize", 1.0, 10.0, 1.0 ).onChange( valuesChanger );
 				gui.add( effectController, "squareWave" ).onChange( valuesChanger );
 				gui.add( effectController, "noise", 0.0, 10.0, 0.5 ).onChange( valuesChanger2 );
 
@@ -422,7 +425,7 @@
 				waterMesh.rotation.x = - Math.PI / 2;
 				waterMesh.matrixAutoUpdate = false;
 				waterMesh.updateMatrix();
-				botmesh.position.set(waterMesh.position.x, waterMesh.position.y-30, waterMesh.position.z);
+				botmesh.position.set(waterMesh.position.x, waterMesh.position.y-100, waterMesh.position.z);
 				botmesh.rotation.x = - Math.PI / 2;
 
 				scene.add( waterMesh );
@@ -445,6 +448,7 @@
                 heightmapVariable.material.uniforms.mouseSize = { value: 20.0 };
 				heightmapVariable.material.uniforms.viscosityConstant = { value: 0.03 };
 				heightmapVariable.material.uniforms.waveSpeedConstant = { value: 3.0 };
+				heightmapVariable.material.uniforms.waveSize = { value: 1.0 };
 				heightmapVariable.material.uniforms.squareWave = { value: false };
 				heightmapVariable.material.defines.BOUNDS = BOUNDS.toFixed( 1 );
 				heightmapVariable.material.defines.BOUNDSW = meshwidth.toFixed( 1 );
