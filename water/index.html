@@ -54,6 +54,7 @@
 			uniform float waveSpeedConstant;
 			uniform bool squareWave;
 			uniform float waveSize;
+			uniform float aspectRatio;
 			#define deltaTime ( 1.0 / 60.0 )
 			#define GRAVITY_CONSTANT ( resolution.x * deltaTime )
 			void main()	{
@@ -64,10 +65,10 @@
 				// heightmapValue.z, heightmapValue.w not used
 				vec4 heightmapValue = texture2D( heightmap, uv );
 				// Get neighbours
-				vec4 north = texture2D( heightmap, uv + vec2( 0.0, cellSize.y ) );
-				vec4 south = texture2D( heightmap, uv + vec2( 0.0, - cellSize.y ) );
-				vec4 east = texture2D( heightmap, uv + vec2( cellSize.x, 0.0 ) );
-				vec4 west = texture2D( heightmap, uv + vec2( - cellSize.x, 0.0 ) );
+				vec4 north = texture2D( heightmap, uv + vec2( 0.0, cellSize.y * aspectRatio ) );
+				vec4 south = texture2D( heightmap, uv + vec2( 0.0, - cellSize.y * aspectRatio ) );
+				vec4 east = texture2D( heightmap, uv + vec2( cellSize.x / aspectRatio, 0.0 ) );
+				vec4 west = texture2D( heightmap, uv + vec2( - cellSize.x / aspectRatio, 0.0 ) );
 				float sump = north.x + south.x + east.x + west.x - 4.0 * heightmapValue.x;
 				float accel = sump * GRAVITY_CONSTANT * waveSpeedConstant;
 				// Dynamics
@@ -87,7 +88,7 @@
 					vec2 uv_converted = uv - vec2(0.5);
 					uv_converted.x *= BOUNDSW;
 					uv_converted.y *= BOUNDSH;
-					float mousePhase = clamp( length( uv_converted - vec2( mousePos.x, - mousePos.y ) ) * PI / mouseSize, 0.0, PI );
+					float mousePhase = clamp( length( (uv_converted - vec2( mousePos.x, - mousePos.y ) ) / vec2(1.0, 1.0)) * PI / mouseSize, 0.0, PI );
 					heightmapValue.x += (cos( mousePhase ) + 1.0) * waveSize;
 				}
 				// uv_converted goes between [-0.5, 0.5], to match the nature of the coordinates of mousePos,
@@ -265,7 +266,8 @@
                 waveSpeed: 3.0,
                 noise: 1.0,
                 squareWave: false,
-                waveSize: 1.0
+                waveSize: 1.0,
+                aspectRatio: screen.width / screen.height
             };
             var noiseLevel = 1.0;
 			var simplex = new SimplexNoise();
@@ -370,7 +372,6 @@
 				gui.add( effectController, "squareWave" ).onChange( valuesChanger );
 				gui.add( effectController, "noise", 0.0, 10.0, 0.5 ).onChange( valuesChanger2 );
 
-
 				var buttonSmooth = {
 				    smoothWater: function() {
 					smoothWater();
@@ -425,7 +426,7 @@
 				waterMesh.rotation.x = - Math.PI / 2;
 				waterMesh.matrixAutoUpdate = false;
 				waterMesh.updateMatrix();
-				botmesh.position.set(waterMesh.position.x, waterMesh.position.y-100, waterMesh.position.z);
+				botmesh.position.set(waterMesh.position.x, waterMesh.position.y-200, waterMesh.position.z);
 				botmesh.rotation.x = - Math.PI / 2;
 
 				scene.add( waterMesh );
@@ -450,6 +451,7 @@
 				heightmapVariable.material.uniforms.waveSpeedConstant = { value: 3.0 };
 				heightmapVariable.material.uniforms.waveSize = { value: 1.0 };
 				heightmapVariable.material.uniforms.squareWave = { value: false };
+				heightmapVariable.material.uniforms.aspectRatio = {value: screen.width / screen.height}
 				heightmapVariable.material.defines.BOUNDS = BOUNDS.toFixed( 1 );
 				heightmapVariable.material.defines.BOUNDSW = meshwidth.toFixed( 1 );
 				heightmapVariable.material.defines.BOUNDSH = meshheight.toFixed( 1 );
