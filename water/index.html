@@ -29,9 +29,14 @@
 
 		<div id="info">
 			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - <span id="waterSize"></span> webgl gpgpu water<br/>
+			Project created by Victor Wang, Alex Yang, Paul Legler<br/>
+			Credit given to ThreeJS and Pressure.js for their open source contributions<br/>
 			Select <span id="options"></span> water size<br/>
-			Click and move mouse to disturb water.<br>
-			'W' key toggles wireframe. 'Spacebar' shows/hides UI elements.
+			Click and move mouse to disturb water.<br/>
+			Pressure sensitive devices may use different pressures to change mouse size<br/>
+			'W' key toggles wireframe. <br/>
+			'V' key shows/hides UI elements. <br/>
+			'Spacebar' play/pauses animation.
 		</div>
 
 		<script src="../build/three.js"></script>
@@ -202,6 +207,7 @@
 			var smoothShader;
 			var highestForce = 0;
 			var currentMouseSize;
+			var currentlyPlaying = true;
             var effectController = {
                 mouseSize: 20.0,
                 viscosity: 0.03,
@@ -279,16 +285,21 @@
 						waterMesh.material.wireframe = ! waterMesh.material.wireframe;
 						waterMesh.material.needsUpdate = true;
 					} else if ( event.keyCode === 32 ) {
-						if (gui.domElement.style.display === "none") {
-							gui.domElement.style.display = "";
-							stats.domElement.style.display = "";
-						    document.getElementById("info").style.display = "";
-						} else {
-							gui.domElement.style.display = "none";
-							stats.domElement.style.display = "none";
-						    document.getElementById("info").style.display = "none";
+						currentlyPlaying = !currentlyPlaying;
+						if(currentlyPlaying){
+						    animate();
 						}
-					}
+					} else if ( event.keyCode === 86 ) {
+                        if (gui.domElement.style.display === "none") {
+                            gui.domElement.style.display = "";
+                            stats.domElement.style.display = "";
+                            document.getElementById("info").style.display = "";
+                        } else {
+                            gui.domElement.style.display = "none";
+                            stats.domElement.style.display = "none";
+                            document.getElementById("info").style.display = "none";
+                        }
+                    }
 				} , false );
 				window.addEventListener( 'resize', onWindowResize, false );
 				var gui = new dat.GUI();
@@ -486,6 +497,10 @@
 				}
 			}
 			function animate() {
+			    if(!currentlyPlaying){
+			        return;
+				}
+
 				requestAnimationFrame( animate );
 				render();
 				stats.update();
