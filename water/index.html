@@ -31,10 +31,10 @@
 			<a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - <span id="waterSize"></span> webgl gpgpu water<br/>
 			Project created by Victor Wang, Alex Yang, Paul Legler<br/>
 			Credit given to <a href="https://threejs.org/examples/webgl_gpgpu_water.html" target="_blank" rel="noopener">three.js</a>
-			and <a href="https://pressurejs.com" target="_blank" rel="noopener">pressure.js</a> for their open source contributions<br/>
+			and <a href="https://pressurejs.com" target="_blank" rel="noopener">pressure.js</a> for their open source contributions.<br/>
 			Select <span id="options"></span> water size<br/>
 			Click and move mouse to disturb water.<br/>
-			Pressure sensitive devices may use different pressures to change mouse size<br/>
+			Pressure sensitive devices may use different pressures to change mouse size.<br/>
 			'W' key toggles wireframe. <br/>
 			'V' key shows/hides UI elements. <br/>
 			'Spacebar' play/pauses animation.
@@ -304,6 +304,9 @@
 				} , false );
 				window.addEventListener( 'resize', onWindowResize, false );
 				var gui = new dat.GUI();
+                gui.domElement.addEventListener('mousedown', function(event){
+                    event.stopPropagation();
+                }, false);
 				var valuesChanger = function() {
 				    currentMouseSize = effectController.mouseSize;
 					heightmapVariable.material.uniforms.mouseSize.value = effectController.mouseSize;
@@ -482,8 +485,10 @@
                 }
 			}
             function onDocumentMouseUp( event ) {
-                setMouseCoords( event.clientX, event.clientY );
-                mouseDown = false;
+			    if(mouseDown) {
+                    setMouseCoords(event.clientX, event.clientY);
+                    mouseDown = false;
+                }
             }
 			function onDocumentTouchStart( event ) {
 				if ( event.touches.length === 1 ) {
