@@ -36,6 +36,7 @@
 			Click and move mouse to disturb water.<br/>
 			Pressure sensitive devices may use different pressures to change mouse size.<br/>
 			'W' key toggles wireframe. <br/>
+            'R' key resets animation <br/>
 			'V' key shows/hides UI elements. <br/>
 			'Spacebar' play/pauses animation.
 		</div>
@@ -285,7 +286,12 @@
 					if ( event.keyCode === 87 ) {
 						waterMesh.material.wireframe = ! waterMesh.material.wireframe;
 						waterMesh.material.needsUpdate = true;
-					} else if ( event.keyCode === 32 ) {
+					} else if ( event.keyCode === 82 ) {
+                        scene.remove(waterMesh);
+                        scene.remove(botmesh);
+                        initWater();
+                        valuesChanger();
+                    } else if ( event.keyCode === 32 ) {
 						currentlyPlaying = !currentlyPlaying;
 						if(currentlyPlaying){
 						    animate();
